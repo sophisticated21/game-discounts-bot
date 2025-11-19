@@ -1,0 +1,1 @@
+print("GameDiscounts bot is ready.")
