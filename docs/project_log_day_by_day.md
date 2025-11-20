@@ -49,3 +49,33 @@ automatic game list creation, and scoring strategy foundations were established.
 - System is now fully automated for collecting and preparing high-quality game lists.
 - Next step: Implement spam-protection layer (posted.json manager) and 
   final decision engine for tweet selection.
+
+
+# Day 2 — Project Log
+
+## Date: 20 Nov 2025
+
+### Summary
+Set up the tweet text system, linked it to the Steam pipeline, and made the bot ready to post daily picks for Brazil.
+
+### Work Completed
+
+- Added `src/format_tweet.py`:
+  - Generates tweet text in Brazilian Portuguese.
+  - Uses several templates and picks one at random.
+  - Tone depends on discount level (big / medium / small).
+  - Uses Steam links with Brazil settings: `?cc=br&l=portuguese`.
+
+- Updated `main.py` to:
+  - Build a ranked list of discounted Steam games.
+  - Select up to 10 games for the day.
+  - Call `format_tweet(info)` for each selected game.
+  - Print final tweet text to the console (for review).
+
+- Confirmed that the posting guard (`posted_manager.py`) is in use:
+  - Avoids posting the same game too often.
+  - Updates history after each selected game.
+
+### Notes
+- Steam (Brazil) flow is now end-to-end: data fetch → filter → score → select → tweet text.
+- Next steps: connect to X (Twitter) API and add a daily schedule.
