@@ -45,12 +45,15 @@ def run():
         if discount == 0:
             continue
 
-        # spam engeli
+        # spam check
         if not posted.should_post(app_id, discount, final_price):
             continue
 
-        # puan
+        # score
         score = score_game(review_count, discount)
+
+        # steam header image
+        image_url = f"https://cdn.cloudflare.steamstatic.com/steam/apps/{app_id}/header.jpg"
 
         candidates.append({
             "app_id": app_id,
@@ -60,13 +63,14 @@ def run():
             "original": original,
             "currency": currency,
             "review": review_count,
-            "score": score
+            "score": score,
+            "image_url": image_url
         })
 
-    # puana göre sırala
+    # sort by score
     candidates.sort(key=lambda x: x["score"], reverse=True)
 
-    # günlük en fazla 10 oyun
+    # daily top 10
     selected = candidates[:10]
 
     print("\n=== Today’s Picks ===\n")
@@ -74,9 +78,12 @@ def run():
     for item in selected:
         print(f"{item['name']} — {item['discount']}% off — {item['price']} {item['currency']}")
         posted.update(item["app_id"], item["discount"], item["price"])
+
         tweet = format_tweet(item)
         print(tweet)
+        print("IMAGE:", item["image_url"])
         print("---------------------------")
+
 
 if __name__ == "__main__":
     run()
